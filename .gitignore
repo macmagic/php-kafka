@@ -7,8 +7,9 @@
 /public/bundles/
 /var/
 /vendor/
-/data/
 ###< symfony/framework-bundle ###
+
+/data
 
 ###> friendsofphp/php-cs-fixer ###
 /.php_cs
