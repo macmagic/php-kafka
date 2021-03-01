@@ -9,7 +9,8 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
-/data
+data/
+.idea
 
 ###> friendsofphp/php-cs-fixer ###
 /.php_cs
