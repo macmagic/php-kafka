@@ -1,0 +1,19 @@
+upload_music:
+  path: /api/v1/upload
+  controller: App\Ui\Action\CreateImportMusicAction
+  methods: [POST]
+
+get_song:
+  path: /api/v1/song/{id}
+  controller: App\Ui\Action\GetSongAction
+  methods: [GET]
+
+play_song:
+  path: /api/v1/song/{id}/play
+  controller: App\Ui\Action\PlaySongAction
+  methods: [GET]
+
+create_motorcycle:
+  path: /api/v1/motorcycle
+  controller: App\Ui\Action\CreateMotorcycleAction
+  methods: [POST]

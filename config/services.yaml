@@ -1,0 +1,72 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    upload_tmp_dir: '%kernel.project_dir%/data/tmp'
+    music_dir: '%kernel.project_dir%/data/music'
+    http.kafka.api.rest: 'http://localhost:8082'
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+
+    Actions:
+        public: true
+        namespace: App\Ui\Action\
+        resource: '%kernel.project_dir%/src/Ui/Action/*Action.php'
+        tags: [ 'controller.service_arguments' ]
+
+    App\Ui\Action\CreateImportMusicAction:
+        tags: [ 'controller.service_arguments' ]
+        bind:
+            $cloudBus: '@App\Domain\Bus\Cloud\CloudBusInterface'
+            $uploadTmpDir: '%upload_tmp_dir%'
+
+    App\Domain\Bus\Command\CommandBusInterface: '@App\Infrastructure\Bus\Command\CommandBus'
+
+    App\Domain\Bus\Query\QueryBusInterface: '@App\Infrastructure\Bus\Query\QueryBus'
+
+    App\Domain\Bus\Cloud\CloudBusInterface: '@App\Infrastructure\Bus\Cloud\CloudBus'
+
+    App\Infrastructure\Bus\Query\QueryBus:
+        arguments:
+            - '@messenger.bus.queries'
+
+    App\Infrastructure\Bus\Command\CommandBus:
+        arguments:
+            - '@messenger.bus.commands'
+
+    _instanceof:
+        App\Domain\Bus\Command\CommandHandlerInterface:
+            public: true
+            tags:
+                - { name: messenger.message_handler, bus: messenger.bus.commands }
+
+        App\Domain\Bus\Query\QueryHandlerInterface:
+            public: true
+            tags:
+                - { name: messenger.message_handler, bus: messenger.bus.queries }
+
+    App\Infrastructure\EventSubscriber\ApiExceptionSubscriber:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+
+    App\Infrastructure\EventSubscriber\ApiExceptionLoggerSubscriber:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
