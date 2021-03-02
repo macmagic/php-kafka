@@ -10,7 +10,7 @@
 ###< symfony/framework-bundle ###
 
 /data/
-.idea/*
+/.idea/*
 
 ###> friendsofphp/php-cs-fixer ###
 /.php_cs
