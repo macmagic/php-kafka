@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\BasicExample\Ui\Command;
-
 
 use RdKafka\Conf;
 use RdKafka\Consumer;
@@ -34,9 +34,9 @@ class BasicConsumerStoredOffsetCommand extends Command
 
         $topicConfig = new TopicConf();
         $topicConfig->set('auto.commit.interval.ms', 100);
-        $topicConfig->set('offset.store.method','file');
+        $topicConfig->set('offset.store.method', 'file');
         $topicConfig->set('auto.offset.reset', 'smallest');
-        $topicConfig->set('offset.store.path', __DIR__ . '/../../../../data/kafka-offset.txt');
+        $topicConfig->set('offset.store.path', __DIR__.'/../../../../data/kafka-offset.txt');
 
         $topic = $consumer->newTopic(self::TOPIC, $topicConfig);
 

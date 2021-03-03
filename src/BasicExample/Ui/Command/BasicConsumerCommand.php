@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\BasicExample\Ui\Command;
-
 
 use RdKafka\Conf;
 use RdKafka\Consumer;

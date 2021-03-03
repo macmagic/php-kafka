@@ -37,8 +37,8 @@ class MusicDiscoveryService implements MusicDiscoveryInterface, LoggerAwareInter
         $audioMetadata->setTitle($metadata['comments_html']['title'][0]);
         $audioMetadata->setAuthor($metadata['comments_html']['band'][0]);
         $audioMetadata->setAlbum($metadata['comments_html']['album'][0]);
-        $audioMetadata->setYear(intval($metadata['comments_html']['year'][0]));
-        $audioMetadata->setTrackNumber(isset($metadata['comments_html']['track_number']) ? intval($metadata['comments_html']['track_number'][0]) : '');
+        $audioMetadata->setYear((int) ($metadata['comments_html']['year'][0]));
+        $audioMetadata->setTrackNumber(isset($metadata['comments_html']['track_number']) ? (int) ($metadata['comments_html']['track_number'][0]) : '');
         $audioMetadata->setQuality((string) ($metadata['bitrate'] / 1000).'kbps');
         $audioMetadata->setDuration($metadata['playtime_string']);
         $audioMetadata->setFileSize(filesize($filePath));

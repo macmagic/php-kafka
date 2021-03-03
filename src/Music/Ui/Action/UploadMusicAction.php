@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Music\Ui\Action;
 
-use App\Music\Application\Message\UploadMusicMessage;
 use App\Common\Domain\Bus\Cloud\CloudBusInterface;
 use App\Common\Domain\Bus\Command\CommandBusInterface;
 use App\Common\Domain\Bus\Query\QueryBusInterface;
 use App\Common\Ui\Action\AbstractActionController;
+use App\Music\Application\Message\UploadMusicMessage;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -36,8 +36,7 @@ class UploadMusicAction extends AbstractActionController
         CommandBusInterface $commandBus,
         QueryBusInterface $queryBus,
         ParameterBagInterface $parameterBag
-    )
-    {
+    ) {
         parent::__construct($cloudBus, $commandBus, $queryBus);
         $this->parametersBag = $parameterBag;
         $this->allowedExtensions = $this->parametersBag->get('allowed_extensions');
