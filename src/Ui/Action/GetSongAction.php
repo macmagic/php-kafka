@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Ui\Action;
 
 use App\Application\Query\GetSongQuery;
-use App\Domain\Bus\Query\QueryBusInterface;
+use App\Common\Domain\Bus\Query\QueryBusInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;

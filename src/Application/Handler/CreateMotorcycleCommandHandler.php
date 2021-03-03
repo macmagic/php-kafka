@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Application\Handler;
 
 use App\Application\Command\CreateMotorcycleCommand;
-use App\Domain\Bus\Command\CommandHandlerInterface;
+use App\Common\Domain\Bus\Command\CommandHandlerInterface;
 use Enqueue\RdKafka\RdKafkaConnectionFactory;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Application\Command;
 
-use App\Domain\Bus\Command\CommandInterface;
+use App\Common\Domain\Bus\Command\CommandInterface;
 use App\Ui\Action\Request\CreateMotorcycleRequest;
 
 class CreateMotorcycleCommand implements CommandInterface

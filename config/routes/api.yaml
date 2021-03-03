@@ -1,6 +1,6 @@
 upload_music:
-  path: /api/v1/upload
-  controller: App\Ui\Action\CreateImportMusicAction
+  path: /api/v1/music/upload
+  controller: App\Music\Ui\Action\UploadMusicAction
   methods: [POST]
 
 get_song:

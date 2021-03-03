@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Ui\Action;
 
 use App\Application\Command\CreateMotorcycleCommand;
-use App\Domain\Bus\Command\CommandBusInterface;
+use App\Common\Domain\Bus\Command\CommandBusInterface;
 use App\Infrastructure\HttpClient\KafkaHttpClient;
 use App\Ui\Action\Request\CreateMotorcycleRequest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;

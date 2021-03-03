@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Ui\Action;
+namespace App\Music\Ui\Action;
 
-use App\Application\Message\ImportFileMessage;
+use App\Music\Application\Message\UploadMusicMessage;
 use App\Common\Domain\Bus\Cloud\CloudBusInterface;
+use App\Common\Domain\Bus\Command\CommandBusInterface;
+use App\Common\Domain\Bus\Query\QueryBusInterface;
+use App\Common\Ui\Action\AbstractActionController;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,19 +19,29 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
-class CreateImportMusicAction
+class UploadMusicAction extends AbstractActionController
 {
     private const ALLOWED_EXTENSIONS = ['mp3', 'ogg', 'wma', 'wav', 'zip'];
 
     private const REQUEST_FILE_KEY = 'file';
 
-    private CloudBusInterface $cloudBus;
+    private ParameterBagInterface $parametersBag;
 
-    private string $uploadTmpDir;
+    private array $allowedExtensions;
 
-    public function __construct(CloudBusInterface $cloudBus)
+    private string $uploadDir;
+
+    public function __construct(
+        CloudBusInterface $cloudBus,
+        CommandBusInterface $commandBus,
+        QueryBusInterface $queryBus,
+        ParameterBagInterface $parameterBag
+    )
     {
-        $this->cloudBus = $cloudBus;
+        parent::__construct($cloudBus, $commandBus, $queryBus);
+        $this->parametersBag = $parameterBag;
+        $this->allowedExtensions = $this->parametersBag->get('allowed_extensions');
+        $this->uploadDir = $this->parametersBag->get('upload_dir');
     }
 
     public function __invoke(Request $request): Response
@@ -44,20 +58,20 @@ class CreateImportMusicAction
             $extension = $file->getClientOriginalExtension();
             $filename = sprintf('%s.%s', $importId->toString(), $extension);
 
-            if (!\in_array($extension, self::ALLOWED_EXTENSIONS, true)) {
+            if (!\in_array($extension, $this->allowedExtensions, true)) {
                 throw new UnsupportedMediaTypeHttpException(sprintf('The upload file is not valid, only files with %s extension are allowed', implode(',', self::ALLOWED_EXTENSIONS)));
             }
 
             try {
-                $file->move($this->uploadTmpDir, $filename);
+                $file->move($this->uploadDir, $filename);
             } catch (FileException $exception) {
                 throw new BadRequestHttpException(sprintf('Something went wrong moving the file to the new directory: %s', $exception->getMessage()));
             }
 
-            $message = new ImportFileMessage($importId->toString(), $this->uploadTmpDir, $filename, $file->getClientOriginalName());
-            $this->cloudBus->send($message);
+            $message = new UploadMusicMessage($importId->toString(), $filename, $file->getClientOriginalName());
+            $this->send($message);
         }
 
-        return new Response(null, Response::HTTP_CREATED);
+        return new Response('', Response::HTTP_CREATED);
     }
 }
