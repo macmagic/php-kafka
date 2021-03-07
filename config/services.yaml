@@ -6,6 +6,7 @@
 parameters:
     upload_dir: '%kernel.project_dir%/data/tmp'
     music_dir: '%kernel.project_dir%/data/music'
+    cover_dir: '%kernel.project_dir%/data/cover'
     http.kafka.api.rest: 'http://localhost:8082'
     allowed_extensions:
         - mp3
@@ -32,10 +33,10 @@ services:
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
 
-    Actions:
+    BasicExampleActions:
         public: true
-        namespace: App\Ui\Action\
-        resource: '%kernel.project_dir%/src/Ui/Action/*Action.php'
+        namespace: App\BasicExample\Ui\Action\
+        resource: '%kernel.project_dir%/src/BasicExample/Ui/Action/*Action.php'
         tags: [ 'controller.service_arguments' ]
 
     MusicActions:
@@ -43,6 +44,12 @@ services:
         namespace: App\Music\Ui\Action\
         resource: '%kernel.project_dir%/src/Music/Ui/Action/*Action.php'
         tags: [ 'controller.service_arguments' ]
+
+    App\Music\Infrastructure\Service\StorageService:
+        arguments:
+            - '%upload_dir%'
+            - '%music_dir%'
+            - '%cover_dir%'
 
     App\Common\Domain\Bus\Command\CommandBusInterface: '@App\Common\Infrastructure\Bus\Command\CommandBus'
 

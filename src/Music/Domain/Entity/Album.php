@@ -34,6 +34,11 @@ class Album
     private int $year;
 
     /**
+     * @ORM\Column(name="cover_filename", type="string", nullable=true)
+     */
+    private string $coverFilename;
+
+    /**
      * @ORM\Column(name="created_at", type="datetime")
      */
     private DateTime $createdAt;
@@ -49,11 +54,12 @@ class Album
      */
     private PersistentCollection $songs;
 
-    public function __construct(Uuid $id, string $name, int $year, DateTime $createdAt, Author $author)
+    public function __construct(Uuid $id, string $name, int $year, string $coverFilename, DateTime $createdAt, Author $author)
     {
         $this->id = $id;
         $this->name = $name;
         $this->year = $year;
+        $this->coverFilename = $coverFilename;
         $this->createdAt = $createdAt;
         $this->author = $author;
     }
@@ -71,6 +77,11 @@ class Album
     public function getYear(): int
     {
         return $this->year;
+    }
+
+    public function getCoverFilename(): string
+    {
+        return $this->coverFilename;
     }
 
     public function getCreatedAt(): DateTime

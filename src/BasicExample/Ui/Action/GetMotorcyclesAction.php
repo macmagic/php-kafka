@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\Music\Ui\Action;
+namespace App\BasicExample\Ui\Action;
 
+use App\BasicExample\Application\Query\GetMotorcyclesQuery;
 use App\Common\Domain\Bus\Cloud\CloudBusInterface;
 use App\Common\Domain\Bus\Command\CommandBusInterface;
 use App\Common\Domain\Bus\Query\QueryBusInterface;
 use App\Common\Ui\Action\AbstractActionController;
-use App\Music\Application\Query\GetSongQuery;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class GetSongAction extends AbstractActionController
+class GetMotorcyclesAction extends AbstractActionController
 {
     private SerializerInterface $serializer;
 
@@ -28,16 +28,13 @@ class GetSongAction extends AbstractActionController
         $this->serializer = $serializer;
     }
 
-    public function __invoke(string $id): Response
+    public function __invoke(): Response
     {
-        $query = new GetSongQuery($id);
+        $query = new GetMotorcyclesQuery();
         $result = $this->ask($query);
 
         return JsonResponse::fromJsonString(
-            $this->serializer->serialize(
-                $result,
-                JsonEncoder::FORMAT
-            )
+            $this->serializer->serialize($result, JsonEncoder::FORMAT)
         );
     }
 }

@@ -14,26 +14,33 @@ class AlbumService
 {
     private AlbumRepositoryInterface $repository;
 
-    public function __construct(AlbumRepositoryInterface $repository)
+    private StorageServiceInterface $storageService;
+
+    public function __construct(AlbumRepositoryInterface $repository, StorageServiceInterface $storageService)
     {
         $this->repository = $repository;
+        $this->storageService = $storageService;
     }
 
     public function createAlbumFromAudioMetadata(AudioMetadataDTO $audioMetadataDTO, Author $author): Album
     {
         $album = $this->repository->findAlbumByNameAndAuthor($audioMetadataDTO->getAlbum(), $author);
 
-        if (null === $album) {
-            $album = new Album(
-                Uuid::v4(),
-                $audioMetadataDTO->getAlbum(),
-                $audioMetadataDTO->getYear(),
-                new \DateTime(),
-                $author
-            );
-
-            $this->repository->save($album);
+        if (null !== $album) {
+            return $album;
         }
+
+        $coverFilename = $this->storageService->saveAlbumCoverFile($audioMetadataDTO->getCoverImageContent());
+        $album = new Album(
+            Uuid::v4(),
+            $audioMetadataDTO->getAlbum(),
+            $audioMetadataDTO->getYear(),
+            $coverFilename,
+            new \DateTime(),
+            $author
+        );
+
+        $this->repository->save($album);
 
         return $album;
     }

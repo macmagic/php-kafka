@@ -24,6 +24,10 @@ class AudioMetadataDTO
 
     private int $year;
 
+    private string |
+
+null $coverImageContent;
+
     public function getFilename(): string
     {
         return $this->filename;
@@ -112,5 +116,15 @@ class AudioMetadataDTO
     public function setYear(int $year): void
     {
         $this->year = $year;
+    }
+
+    public function getCoverImageContent(): ?string
+    {
+        return $this->coverImageContent;
+    }
+
+    public function setCoverImageContent(string $coverImageContent): void
+    {
+        $this->coverImageContent = $coverImageContent;
     }
 }

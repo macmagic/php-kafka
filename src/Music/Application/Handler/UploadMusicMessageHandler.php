@@ -26,7 +26,7 @@ class UploadMusicMessageHandler implements CloudHandlerInterface, LoggerAwareInt
     {
         $this->logger->info('Get message from topic');
         try {
-            $this->uploadMusicService->importMusic(
+            $this->uploadMusicService->uploadMusic(
                 $message->getFilename(),
                 $message->getOriginalFilename()
             );

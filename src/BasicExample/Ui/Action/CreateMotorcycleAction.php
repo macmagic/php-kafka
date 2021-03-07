@@ -2,19 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Music\Ui\Action;
+namespace App\BasicExample\Ui\Action;
 
+use App\BasicExample\Application\Command\CreateMotorcycleCommand;
+use App\BasicExample\Ui\Action\Request\CreateMotorcycleRequest;
 use App\Common\Domain\Bus\Cloud\CloudBusInterface;
 use App\Common\Domain\Bus\Command\CommandBusInterface;
 use App\Common\Domain\Bus\Query\QueryBusInterface;
 use App\Common\Ui\Action\AbstractActionController;
-use App\Music\Application\Query\GetSongQuery;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class GetSongAction extends AbstractActionController
+class CreateMotorcycleAction extends AbstractActionController
 {
     private SerializerInterface $serializer;
 
@@ -28,16 +29,19 @@ class GetSongAction extends AbstractActionController
         $this->serializer = $serializer;
     }
 
-    public function __invoke(string $id): Response
+    public function __invoke(Request $request): Response
     {
-        $query = new GetSongQuery($id);
-        $result = $this->ask($query);
-
-        return JsonResponse::fromJsonString(
-            $this->serializer->serialize(
-                $result,
-                JsonEncoder::FORMAT
-            )
+        $bulk = $this->serializer->deserialize(
+            $request->getContent(),
+            CreateMotorcycleRequest::class.'[]',
+            JsonEncoder::FORMAT
         );
+
+        foreach ($bulk as $item) {
+            $command = CreateMotorcycleCommand::createFromRequest($item);
+            $this->execute($command);
+        }
+
+        return new Response('', Response::HTTP_CREATED);
     }
 }
