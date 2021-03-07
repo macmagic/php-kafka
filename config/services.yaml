@@ -4,9 +4,16 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    upload_tmp_dir: '%kernel.project_dir%/data/tmp'
+    upload_dir: '%kernel.project_dir%/data/tmp'
     music_dir: '%kernel.project_dir%/data/music'
+    cover_dir: '%kernel.project_dir%/data/cover'
     http.kafka.api.rest: 'http://localhost:8082'
+    allowed_extensions:
+        - mp3
+        - ogg
+        - wma
+        - wav
+        - zip
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -26,47 +33,63 @@ services:
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
 
-    Actions:
+    BasicExampleActions:
         public: true
-        namespace: App\Ui\Action\
-        resource: '%kernel.project_dir%/src/Ui/Action/*Action.php'
+        namespace: App\BasicExample\Ui\Action\
+        resource: '%kernel.project_dir%/src/BasicExample/Ui/Action/*Action.php'
         tags: [ 'controller.service_arguments' ]
 
-    App\Ui\Action\CreateImportMusicAction:
+    MusicActions:
+        public: true
+        namespace: App\Music\Ui\Action\
+        resource: '%kernel.project_dir%/src/Music/Ui/Action/*Action.php'
         tags: [ 'controller.service_arguments' ]
-        bind:
-            $cloudBus: '@App\Domain\Bus\Cloud\CloudBusInterface'
-            $uploadTmpDir: '%upload_tmp_dir%'
 
-    App\Domain\Bus\Command\CommandBusInterface: '@App\Infrastructure\Bus\Command\CommandBus'
+    App\Music\Infrastructure\Service\StorageService:
+        arguments:
+            - '%upload_dir%'
+            - '%music_dir%'
+            - '%cover_dir%'
 
-    App\Domain\Bus\Query\QueryBusInterface: '@App\Infrastructure\Bus\Query\QueryBus'
+    App\Common\Domain\Bus\Command\CommandBusInterface: '@App\Common\Infrastructure\Bus\Command\CommandBus'
 
-    App\Domain\Bus\Cloud\CloudBusInterface: '@App\Infrastructure\Bus\Cloud\CloudBus'
+    App\Common\Domain\Bus\Query\QueryBusInterface: '@App\Common\Infrastructure\Bus\Query\QueryBus'
 
-    App\Infrastructure\Bus\Query\QueryBus:
+    App\Common\Domain\Bus\Cloud\CloudBusInterface: '@App\Common\Infrastructure\Bus\Cloud\CloudBus'
+
+    App\Common\Infrastructure\Bus\Query\QueryBus:
         arguments:
             - '@messenger.bus.queries'
 
-    App\Infrastructure\Bus\Command\CommandBus:
+    App\Common\Infrastructure\Bus\Command\CommandBus:
         arguments:
             - '@messenger.bus.commands'
 
+    App\Common\Infrastructure\Bus\Cloud\CloudBus:
+        arguments:
+            - '@messenger.bus.cloud'
+
     _instanceof:
-        App\Domain\Bus\Command\CommandHandlerInterface:
+        App\Common\Domain\Bus\Command\CommandHandlerInterface:
             public: true
             tags:
                 - { name: messenger.message_handler, bus: messenger.bus.commands }
 
-        App\Domain\Bus\Query\QueryHandlerInterface:
+        App\Common\Domain\Bus\Query\QueryHandlerInterface:
             public: true
             tags:
                 - { name: messenger.message_handler, bus: messenger.bus.queries }
 
-    App\Infrastructure\EventSubscriber\ApiExceptionSubscriber:
+        App\Common\Domain\Bus\Cloud\CloudHandlerInterface:
+            public: true
+            tags:
+                - { name: messenger.message_handler, bus: messenger.bus.cloud }
+
+
+    App\Common\Infrastructure\EventSubscriber\ApiExceptionSubscriber:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
 
-    App\Infrastructure\EventSubscriber\ApiExceptionLoggerSubscriber:
+    App\Common\Infrastructure\EventSubscriber\ApiExceptionLoggerSubscriber:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }

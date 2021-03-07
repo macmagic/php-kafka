@@ -1,19 +1,39 @@
 upload_music:
-  path: /api/v1/upload
-  controller: App\Ui\Action\CreateImportMusicAction
+  path: /api/v1/music/upload
+  controller: App\Music\Ui\Action\UploadMusicAction
   methods: [POST]
 
 get_song:
-  path: /api/v1/song/{id}
-  controller: App\Ui\Action\GetSongAction
+  path: /api/v1/music/song/{id}
+  controller: App\Music\Ui\Action\GetSongAction
+  methods: [GET]
+
+get_album_cover_image:
+  path: /api/v1/music/album/cover/{coverId}
+  controller: App\Music\Ui\Action\GetAlbumCoverImageAction
   methods: [GET]
 
 play_song:
-  path: /api/v1/song/{id}/play
-  controller: App\Ui\Action\PlaySongAction
+  path: /api/v1/music/song/{songId}/play
+  controller: App\Music\Ui\Action\PlaySongAction
   methods: [GET]
 
 create_motorcycle:
   path: /api/v1/motorcycle
-  controller: App\Ui\Action\CreateMotorcycleAction
+  controller: App\BasicExample\Ui\Action\CreateMotorcycleAction
+  methods: [POST]
+
+get_motorcycles:
+  path: /api/v1/motorcycle
+  controller: App\BasicExample\Ui\Action\GetMotorcyclesAction
+  methods: [GET]
+
+kafka_rest_get_messages:
+  path: /api/v1/kafka-rest
+  controller: App\BasicExample\Ui\Action\GetKafkaMessageFromRestAction
+  methods: [GET]
+
+kafka_rest_post_messages:
+  path: /api/v1/kafka-rest
+  controller: App\BasicExample\Ui\Action\ProduceKafkaMessageFromRestProxyAction
   methods: [POST]
