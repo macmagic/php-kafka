@@ -32,3 +32,8 @@ kafka_rest_get_messages:
   path: /api/v1/kafka-rest
   controller: App\BasicExample\Ui\Action\GetKafkaMessageFromRestAction
   methods: [GET]
+
+kafka_rest_post_messages:
+  path: /api/v1/kafka-rest
+  controller: App\BasicExample\Ui\Action\ProduceKafkaMessageFromRestProxyAction
+  methods: [POST]

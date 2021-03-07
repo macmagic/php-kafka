@@ -5,16 +5,18 @@ namespace App\BasicExample\Ui\Action;
 
 
 use App\BasicExample\Infrastructure\HttpClient\KafkaHttpClient;
+use App\BasicExample\Ui\Action\Request\ProduceKafkaMessageFromRestProxyRequest;
 use App\Common\Domain\Bus\Cloud\CloudBusInterface;
 use App\Common\Domain\Bus\Command\CommandBusInterface;
 use App\Common\Domain\Bus\Query\QueryBusInterface;
 use App\Common\Ui\Action\AbstractActionController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class GetKafkaMessageFromRestAction extends AbstractActionController
+class ProduceKafkaMessageFromRestProxyAction extends AbstractActionController
 {
     private KafkaHttpClient $client;
 
@@ -33,15 +35,11 @@ class GetKafkaMessageFromRestAction extends AbstractActionController
         $this->serializer = $serializer;
     }
 
-    public function __invoke(): Response
+    public function __invoke(Request $request): Response
     {
-        $result = $this->client->getKafkaMessage();
+        $data = json_decode($request->getContent(), true);
+        $clientResponse = $this->client->produceMessage("rest-proxy", $data);
 
-        return JsonResponse::fromJsonString(
-            $this->serializer->serialize(
-                $result,
-                JsonEncoder::FORMAT
-            )
-        );
+        return JsonResponse::fromJsonString($clientResponse->getContent(), $clientResponse->getStatusCode());
     }
 }
