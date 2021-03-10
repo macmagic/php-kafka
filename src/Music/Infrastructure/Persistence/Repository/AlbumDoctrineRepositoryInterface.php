@@ -9,6 +9,7 @@ use App\Music\Domain\Entity\Author;
 use App\Music\Domain\Repository\AlbumRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @method Album|null findOneBy(array $criteria, ?array $orderBy = null)
@@ -26,6 +27,11 @@ class AlbumDoctrineRepositoryInterface extends ServiceEntityRepository implement
             'name' => $albumName,
             'author' => $author,
         ]);
+    }
+
+    public function findAlbumById(Uuid $albumId): ?Album
+    {
+        return $this->findOneBy(['id' => $albumId]);
     }
 
     public function save(Album $album): void

@@ -6,7 +6,7 @@ namespace App\Music\Domain\Service;
 
 interface StorageServiceInterface
 {
-    public function removeUploadedFile(string $filename);
+    public function removeUploadedFile(string $filename): void;
 
     public function storeMusicFile(string $filename): void;
 

@@ -33,4 +33,14 @@ class AuthorService
 
         return $author;
     }
+
+    public function findAuthorById(Uuid $authorId): ?Author
+    {
+        return $this->repository->findAuthorById($authorId);
+    }
+
+    public function findAllAuthors(): array
+    {
+        return $this->repository->findAllAuthors();
+    }
 }

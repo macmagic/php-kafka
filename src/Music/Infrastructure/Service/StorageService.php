@@ -23,7 +23,7 @@ class StorageService implements StorageServiceInterface
         $this->coverDir = $coverDir;
     }
 
-    public function removeUploadedFile(string $filename)
+    public function removeUploadedFile(string $filename): void
     {
         $filePath = sprintf('%s/%s', $this->uploadDir, $filename);
         if (file_exists($filePath)) {

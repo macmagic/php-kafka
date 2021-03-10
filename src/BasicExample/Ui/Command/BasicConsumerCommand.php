@@ -6,6 +6,7 @@ namespace App\BasicExample\Ui\Command;
 
 use RdKafka\Conf;
 use RdKafka\Consumer;
+use RdKafka\Message;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,6 +37,7 @@ class BasicConsumerCommand extends Command
         $topic->consumeStart(0, \RD_KAFKA_OFFSET_BEGINNING);
 
         while (true) {
+            /** @var Message|null $msg */
             $msg = $topic->consume(0, 1000);
             if (null === $msg) {
                 continue;
@@ -46,6 +48,8 @@ class BasicConsumerCommand extends Command
             }
             $output->writeln($msg->payload);
         }
+
+        $consumer->flush(100);
 
         return 0;
     }

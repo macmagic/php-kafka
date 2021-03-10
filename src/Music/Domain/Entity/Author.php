@@ -60,7 +60,7 @@ class Author
         return $this->createdAt;
     }
 
-    public function getAlbums(): array
+    public function getAlbums(): PersistentCollection
     {
         return $this->albums;
     }

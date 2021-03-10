@@ -30,7 +30,7 @@ class UploadMusicService
         $this->storageService = $storageService;
     }
 
-    public function uploadMusic(string $filename, string $originalFilename)
+    public function uploadMusic(string $filename, string $originalFilename): void
     {
         $audioMetadata = $this->musicDiscovery->getMetadata($filename);
         $author = $this->authorService->createAuthorFromAudioMetadata($audioMetadata);

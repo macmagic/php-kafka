@@ -37,7 +37,7 @@ class BasicProducerCommand extends Command
         $topic = $producer->newTopic(self::TOPIC);
 
         $output->writeln('Send messages');
-        for ($i = 600; $i <= 640; ++$i) {
+        for ($i = 1; $i <= 100; ++$i) {
             $topic->produce(\RD_KAFKA_PARTITION_UA, 0, 'Message payload nº'.$i);
             $producer->poll(0);
         }

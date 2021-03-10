@@ -6,6 +6,7 @@ namespace App\BasicExample\Ui\Command;
 
 use RdKafka\Conf;
 use RdKafka\Consumer;
+use RdKafka\Message;
 use RdKafka\TopicConf;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -33,7 +34,7 @@ class BasicConsumerStoredOffsetCommand extends Command
         $consumer = new Consumer($generalConfig);
 
         $topicConfig = new TopicConf();
-        $topicConfig->set('auto.commit.interval.ms', 100);
+        $topicConfig->set('auto.commit.interval.ms', '100');
         $topicConfig->set('offset.store.method', 'file');
         $topicConfig->set('auto.offset.reset', 'smallest');
         $topicConfig->set('offset.store.path', __DIR__.'/../../../../data/kafka-offset.txt');
@@ -43,6 +44,7 @@ class BasicConsumerStoredOffsetCommand extends Command
         $topic->consumeStart(0, \RD_KAFKA_OFFSET_STORED);
 
         while (true) {
+            /** @var Message|null $msg */
             $msg = $topic->consume(0, 1000);
             if (null === $msg) {
                 continue;
