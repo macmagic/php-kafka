@@ -24,9 +24,7 @@ class AudioMetadataDTO
 
     private int $year;
 
-    private string |
-
-null $coverImageContent;
+    private ?string $coverImageContent;
 
     public function getFilename(): string
     {
@@ -123,7 +121,7 @@ null $coverImageContent;
         return $this->coverImageContent;
     }
 
-    public function setCoverImageContent(string $coverImageContent): void
+    public function setCoverImageContent(?string $coverImageContent): void
     {
         $this->coverImageContent = $coverImageContent;
     }

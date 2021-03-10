@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\BasicExample\Infrastructure\HttpClient;
-
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -14,7 +14,7 @@ class KafkaHttpClient implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    private const CONSUMER_NAME = "rest_proxy_consumer";
+    private const CONSUMER_NAME = 'rest_proxy_consumer';
 
     private HttpClientInterface $client;
 
@@ -42,7 +42,7 @@ class KafkaHttpClient implements LoggerAwareInterface
                 'headers' => [
                     'Content-Type' => 'application/vnd.kafka.json.v2+json',
                 ],
-                'json' => $bodyArray
+                'json' => $bodyArray,
             ]
         );
 
@@ -62,8 +62,8 @@ class KafkaHttpClient implements LoggerAwareInterface
                     'name' => sprintf('%s_instance', self::CONSUMER_NAME),
                     'format' => 'json',
                     'auto.offset.reset' => 'earliest',
-                    'auto.commit.enable' => "false"
-                ]
+                    'auto.commit.enable' => 'false',
+                ],
             ]
         );
 
@@ -78,12 +78,12 @@ class KafkaHttpClient implements LoggerAwareInterface
                     'Content-Type' => 'application/vnd.kafka.json.v2+json',
                 ],
                 'json' => [
-                    'topics' =>  ['rest']
-                ]
+                    'topics' => ['rest'],
+                ],
             ]
         );
 
-        $this->logger->info(sprintf("Request status from subscription is %d", $response->getStatusCode()));
+        $this->logger->info(sprintf('Request status from subscription is %d', $response->getStatusCode()));
 
         $response = $this->client->request(
             'GET',
@@ -91,7 +91,7 @@ class KafkaHttpClient implements LoggerAwareInterface
             [
                 'headers' => [
                     'Accept' => 'application/vnd.kafka.json.v2+json',
-                ]
+                ],
             ]
         );
 
@@ -103,7 +103,7 @@ class KafkaHttpClient implements LoggerAwareInterface
             [
                 'headers' => [
                     'Content-Type' => 'application/vnd.kafka.json.v2+json',
-                ]
+                ],
             ]
         );
 

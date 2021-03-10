@@ -3,14 +3,29 @@ upload_music:
   controller: App\Music\Ui\Action\UploadMusicAction
   methods: [POST]
 
+get_all_authors:
+  path: /api/v1/music/author
+  controller: App\Music\Ui\Action\GetAuthorsAction
+  methods: [ GET ]
+
+get_author:
+  path: /api/v1/music/author/{authorId}
+  controller: App\Music\Ui\Action\GetAuthorByIdAction
+  methods: [GET]
+
+get_album:
+  path: /api/v1/music/album/{albumId}
+  controller: App\Music\Ui\Action\GetAlbumByIdAction
+  methods: [GET]
+
 get_song:
   path: /api/v1/music/song/{id}
   controller: App\Music\Ui\Action\GetSongAction
   methods: [GET]
 
 get_album_cover_image:
-  path: /api/v1/music/album/cover/{coverId}
-  controller: App\Music\Ui\Action\GetAlbumCoverImageAction
+  path: /api/v1/music/album/{albumId}/cover
+  controller: App\Music\Ui\Action\GetAlbumCoverByAlbumIdAction
   methods: [GET]
 
 play_song:

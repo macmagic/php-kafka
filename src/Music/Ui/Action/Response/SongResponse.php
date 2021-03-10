@@ -12,11 +12,7 @@ class SongResponse implements ResponseInterface
 
     private string $title;
 
-    private string $author;
-
-    private string $album;
-
-    private int $year;
+    private string $albumId;
 
     private string $duration;
 
@@ -28,28 +24,29 @@ class SongResponse implements ResponseInterface
 
     private string $originalFilename;
 
+    private string $playSongUrl;
+
     public function __construct(
         string $id,
         string $title,
-        string $author,
-        string $album,
-        int $year,
+        string $albumId,
         string $duration,
         int $trackNumber,
         string $quality,
         string $filename,
-        string $originalFilename)
+        string $originalFilename,
+        string $playSongUrl
+    )
     {
         $this->id = $id;
         $this->title = $title;
-        $this->author = $author;
-        $this->album = $album;
-        $this->year = $year;
+        $this->albumId = $albumId;
         $this->duration = $duration;
         $this->trackNumber = $trackNumber;
         $this->quality = $quality;
         $this->filename = $filename;
         $this->originalFilename = $originalFilename;
+        $this->playSongUrl = $playSongUrl;
     }
 
     public function getId(): string
@@ -62,19 +59,9 @@ class SongResponse implements ResponseInterface
         return $this->title;
     }
 
-    public function getAuthor(): string
+    public function getAlbumId(): string
     {
-        return $this->author;
-    }
-
-    public function getAlbum(): string
-    {
-        return $this->album;
-    }
-
-    public function getYear(): int
-    {
-        return $this->year;
+        return $this->albumId;
     }
 
     public function getDuration(): string
@@ -100,5 +87,10 @@ class SongResponse implements ResponseInterface
     public function getOriginalFilename(): string
     {
         return $this->originalFilename;
+    }
+
+    public function getPlaySongUrl(): string
+    {
+        return $this->playSongUrl;
     }
 }

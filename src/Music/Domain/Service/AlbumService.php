@@ -30,7 +30,11 @@ class AlbumService
             return $album;
         }
 
-        $coverFilename = $this->storageService->saveAlbumCoverFile($audioMetadataDTO->getCoverImageContent());
+        $coverFilename = null;
+        if (null !== $audioMetadataDTO->getCoverImageContent()) {
+            $coverFilename = $this->storageService->saveAlbumCoverFile($audioMetadataDTO->getCoverImageContent());
+        }
+
         $album = new Album(
             Uuid::v4(),
             $audioMetadataDTO->getAlbum(),
@@ -43,5 +47,10 @@ class AlbumService
         $this->repository->save($album);
 
         return $album;
+    }
+
+    public function getAlbumById(Uuid $albumId): ?Album
+    {
+        return $this->repository->findAlbumById($albumId);
     }
 }
