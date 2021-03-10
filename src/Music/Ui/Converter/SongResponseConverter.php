@@ -9,7 +9,7 @@ use App\Music\Ui\Action\Response\SongResponse;
 
 class SongResponseConverter
 {
-    private const PLAY_SONG_URL = "/api/v1/music/song/%s/play";
+    private const PLAY_SONG_URL = '/api/v1/music/song/%s/play';
 
     public static function convert(Song $song): SongResponse
     {

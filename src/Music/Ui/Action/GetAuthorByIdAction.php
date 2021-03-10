@@ -23,8 +23,7 @@ class GetAuthorByIdAction extends AbstractActionController
         CommandBusInterface $commandBus,
         QueryBusInterface $queryBus,
         SerializerInterface $serializer
-    )
-    {
+    ) {
         parent::__construct($cloudBus, $commandBus, $queryBus);
         $this->serializer = $serializer;
     }

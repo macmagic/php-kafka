@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Music\Application\Handler;
-
 
 use App\Common\Domain\Bus\Query\QueryHandlerInterface;
 use App\Common\Domain\Bus\Query\ResponseInterface;
@@ -26,7 +26,7 @@ class GetAuthorByIdQueryHandler implements QueryHandlerInterface
         $author = $this->authorService->findAuthorById(Uuid::fromString($query->getAuthorId()));
 
         if (null === $author) {
-            throw new AuthorNotFoundException(sprintf("Cannot find author by id: %s", $query->getAuthorId()));
+            throw new AuthorNotFoundException(sprintf('Cannot find author by id: %s', $query->getAuthorId()));
         }
 
         return AuthorResponseConverter::convert($author);

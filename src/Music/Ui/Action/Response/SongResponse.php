@@ -36,8 +36,7 @@ class SongResponse implements ResponseInterface
         string $filename,
         string $originalFilename,
         string $playSongUrl
-    )
-    {
+    ) {
         $this->id = $id;
         $this->title = $title;
         $this->albumId = $albumId;

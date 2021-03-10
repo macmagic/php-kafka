@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Music\Application\Handler;
-
 
 use App\Common\Domain\Bus\Query\QueryHandlerInterface;
 use App\Common\Domain\Bus\Query\ResponseInterface;
@@ -26,7 +26,7 @@ class GetAlbumQueryHandler implements QueryHandlerInterface
         $album = $this->albumService->getAlbumById(Uuid::fromString($query->getAlbumId()));
 
         if (null === $album) {
-            throw new AlbumNotFoundException(sprintf("Cannot find album by id: %s", $query->getAlbumId()));
+            throw new AlbumNotFoundException(sprintf('Cannot find album by id: %s', $query->getAlbumId()));
         }
 
         return AlbumResponseConverter::convert($album);

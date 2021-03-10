@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Music\Ui\Converter;
-
 
 use App\Music\Domain\Entity\Author;
 use App\Music\Ui\Action\Response\AuthorsResponse;

@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Music\Application\Handler;
-
 
 use App\Common\Domain\Bus\Query\QueryHandlerInterface;
 use App\Common\Domain\Bus\Query\ResponseInterface;

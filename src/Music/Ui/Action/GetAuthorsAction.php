@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Music\Ui\Action;
-
 
 use App\Common\Domain\Bus\Cloud\CloudBusInterface;
 use App\Common\Domain\Bus\Command\CommandBusInterface;
@@ -23,8 +23,7 @@ class GetAuthorsAction extends AbstractActionController
         CommandBusInterface $commandBus,
         QueryBusInterface $queryBus,
         SerializerInterface $serializer
-    )
-    {
+    ) {
         parent::__construct($cloudBus, $commandBus, $queryBus);
         $this->serializer = $serializer;
     }
